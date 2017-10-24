@@ -10,4 +10,6 @@ Before you start the lab, you should first install:
 * NumPy
 * SciPy
 * matplotlib
-
+ 
+## Data
+The training set is availale from the Udacity classroom. 
