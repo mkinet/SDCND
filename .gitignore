@@ -3,3 +3,4 @@
 CarND-Alexnet-Feature-Extraction/bvlc-alexnet.npy
 CarND-Alexnet-Feature-Extraction/train.p
 */.vscode
+.idea
