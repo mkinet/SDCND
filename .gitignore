@@ -2,6 +2,7 @@
 */__pycache__
 CarND-Alexnet-Feature-Extraction/bvlc-alexnet.npy
 CarND-Alexnet-Feature-Extraction/train.p
+CarND-Transfer-Learning-Lab/data
 */.vscode
 .idea
 *.zip
