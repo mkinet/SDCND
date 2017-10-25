@@ -1,6 +1,12 @@
 import pickle
 import tensorflow as tf
+import numpy as np
 # TODO: import Keras layers you need here
+from keras.models import Sequential
+from keras.layers.core import Dense, Activation, Flatten#, Dropout
+#from keras.layers.convolutional import Convolution2D
+#from keras.layers.pooling import MaxPooling2D
+
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
@@ -46,8 +52,22 @@ def main(_):
     # the dataset
     # 10 for cifar10
     # 43 for traffic
+    model = Sequential()
+    #model.add(Convolution2D(32, 5, 5, input_shape=(32, 32, 3)))
+    model.add(Flatten(input_shape=(1,1,512)))
+    model.add(Dense(10))
+    model.add(Activation('softmax'))
 
     # TODO: train your model here
+
+    from sklearn.preprocessing import LabelBinarizer
+    label_binarizer = LabelBinarizer()
+    y_train_one_hot = label_binarizer.fit_transform(y_train)
+    y_val_one_hot = label_binarizer.fit_transform(y_val)
+
+    model.compile('adam', 'categorical_crossentropy', ['accuracy'])
+    model.fit(X_train, y_train_one_hot, batch_size=256, nb_epoch=200,
+                        validation_data=(X_val, y_val_one_hot), shuffle=True)
 
 
 # parses flags and calls the `main` function above
