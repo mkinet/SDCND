@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import cv2
 from keras.models import Sequential
-from keras.layers import Dense, Flatten, Lambda, Convolution2D, MaxPooling2D, Cropping2D  # , Activation, Dropout
+from keras.layers import Dense, Flatten, Lambda, Convolution2D, MaxPooling2D, Cropping2D, Activation, Dropout
 
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
@@ -122,8 +122,12 @@ def build_model():
     model.add(Lambda(lambda x: (x / 255.) - 0.5, input_shape=(160, 320, 3)))
     # cropping argument is defined as follows : ((top_crop, bottom_crop), (left_crop, right_crop))
     model.add(Cropping2D(cropping=((55, 25), (0, 0))))
-    model.add(Convolution2D(32, 5, 5))
+    model.add(Convolution2D(16, 5, 5))
+    model.add(Dropout(0.5))
     model.add(MaxPooling2D((5, 5)))
+    model.add(Convolution2D(32, 3, 3))
+    model.add(Dropout(0.5))
+    model.add(MaxPooling2D((3, 3)))
     model.add(Flatten())
     model.add(Dense(1))
     model.compile(loss='mse', optimizer='adam')
@@ -148,7 +152,7 @@ def train_model(model, train_generator, valid_generator, plot=False):
         plt.ylabel('mean squared error loss')
         plt.xlabel('epoch')
         plt.legend(['training set', 'validation set'], loc='upper right')
-        plt.show()
+        plt.savefig('training_error.png')
 
     return
 
