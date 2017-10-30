@@ -1,8 +1,12 @@
 */.ipynb_checkpoints
 */__pycache__
-CarND-Alexnet-Feature-Extraction/bvlc-alexnet.npy
-CarND-Alexnet-Feature-Extraction/train.p
-CarND-Transfer-Learning-Lab/data
+*.npy
+*/data
 */.vscode
 .idea
 *.zip
+*.app
+*.csv
+*.p
+CarND-Behavioral-Cloning-P3/recording
+
