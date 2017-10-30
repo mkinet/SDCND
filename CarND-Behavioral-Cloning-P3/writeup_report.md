@@ -101,7 +101,7 @@ The final model architecture (model.py lines 18-24) consisted of two convolution
 
 This architecture is much simpler than the NVIDIA architecture described in the paper. Since that simpler model was able to achieve the (much simpler) goal we had at hand (i.e. drive the simulator instead of a real car) I didn't feel the need to build a much more complicated system. 
 
-In the end, the network is able to drive the car at a speed of 20mph, without leaving the track and is also able to recover if the car is pushed to the sides of the track. It fails however, if the car is placed out of the track, as the training set does not include such harsh recovery events. It still works when the PI speed is set to 30mph but the driving is much less stable.
+In the end, the network is able to drive the car at a speed of 20mph, without leaving the track and is also able to recover if the car is pushed to the sides of the track (see the video in the second lap around 1:06 where I intentionnaly push the car to the sides). It fails however, if the car is placed out of the track, as the training set does not include such harsh recovery events. It still works when the PI speed is set to 30mph but the driving is much less stable.
 
 ####3. Creation of the Training Set & Training Process
 
