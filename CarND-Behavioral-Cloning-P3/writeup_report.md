@@ -1,13 +1,5 @@
 #**Behavioral Cloning** 
 
-##Writeup Template
-
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
-
----
-
-**Behavioral Cloning Project**
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -19,19 +11,17 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image1]: ./figures/center.jpg "Center View"
+[image2]: ./figures/original.png "Original figure "
+[image3]: ./figures/flipped.png "Image after flipping"
+[image4]: ./figures/training_error.png "training/validation MSE during training"
+
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
----
-###Files Submitted & Code Quality
+Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+
+###Files Submitted and Code Quality
 
 ####1. Submission includes all required files and can be used to run the simulator in autonomous mode
 
@@ -39,43 +29,58 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* writeup_report.md summarizing the results
+* output_video.mp4 showing the simulation running in autonomous mode with my model
 
 ####2. Submission includes functional code
-Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
+Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing: 
 ```sh
 python drive.py model.h5
 ```
+Note that the driving speed has been set to 20mph, instead of the initial value of 9mph which seemed terribly slow.
 
 ####3. Submission code is usable and readable
 
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+The model.py file contains the code for training and saving the convolution neural network. The file it contains comments to explain how the code works. The different steps of the process have been separated in functions instead of one big script. Each function is documented. 
 
 ###Model Architecture and Training Strategy
 
 ####1. An appropriate model architecture has been employed
+The model is implemented in Keras. There are first two layers that performs a basic preprocessing to the feeded images :
+- Normalization layer : Normalize image arrays between -0.5 and 0.5
+- Image cropping layer : Remove useless background information from the images. 50 pixels are cropped at the top and 20 at the bottom.
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
-
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The architecture of the network is made of two convolutional layers (each followed by max pooling, dropout and relu activation) and two dense layers. More precisely, we have the following sequence of layers :
+- Convolution layer with 16 filters of size (5,5)
+   - Max Pooling with a filter of size (5,5)
+   - Dropout with a dropout rate of 10%
+   - ReLu activation
+- Convolution layer with 32 filters of size (5,5)
+   - Max Pooling with a filter of size (5,5)
+   - Dropout with a dropout rate of 10%
+   - ReLu activation
+- Dense layer with 128 hidden units
+    - Dropout with a dropout rate of 20%
+    - ReLu activation
+- Linear layer to compute the output.
 
 ####2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains dropout layers after each convolutional layer, and after the first dense layer in order to reduce overfitting (model.py lines 198, 202, 206). The dropout rate is moderate (10% on the convolutional layers, 20% on the dense layer) .
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained on 80% of the data and validated on the 20% remaining to ensure that the model was not overfitting (code line 164). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track number one.
 
 ####3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25). Five epochs where enough to train the model.
 
 ####4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road and image flipping. 
 
 For details about how I created the training data, see the next section. 
 
-###Model Architecture and Training Strategy
+###Model construction
 
 ####1. Solution Design Approach
 
@@ -83,71 +88,54 @@ The overall strategy for deriving a model architecture was to build the network 
 
 I started with a very simple architecture (just one fully connected layer), and the model was able to drive for no more than a few meters. During training, I computed the loss on both the training set and on a validation made up of 20% of the original data. To avoid overfitting, the training was limited to 2 epochs.
 
-Then I added one convolutional layer, followed by one max pooling. The training error was reduced significantly with respect to the first model, both on the training and validation set, and the car was able to drive half a lap smoothly. The difficulties arise whenever the car leaves the track, especially if the limits of the track are not the same as everywhere else. 
+Then I added one convolutional layer, followed by max pooling. The training error was reduced significantly with respect to the first model, both on the training and validation set, and the car was able to drive half a lap smoothly. It crashed in the sharp turn after the bridge. The difficulties arise whenever the car leaves the track, especially if the limits of the track are not the same as everywhere else. 
+
+The model was overfitting significantly, even with a small number of epoch, hence I modified the model by adding dropout. 
+
+Then I added one convolutional layer, and one dense layer. The performance improved significantly. At that point the car was able to recover autonomously if I force it slightly sideways. It had still dificulties in the sharp turn. One key improvement was to realize that opencv (which I use to read the images) reads the images in BGR format, while the simulator feed them in RGB format. Fixing this issue and making sure that the network was learning on RGB images made the car able to complete the lap autonomously without leaving the road. 
 
 
+####2. Final Model Architecture 
 
-To combat the overfitting, I modified the model so that ...
+The final model architecture (model.py lines 18-24) consisted of two convolutional layers (each followed by max pooling, dropout and relu activation) and two dense layers. For more details on the final architecture see above.
 
-Then I ... 
+This architecture is much simpler than the NVIDIA architecture described in the paper. Since that simpler model was able to achieve the (much simpler) goal we had at hand (i.e. drive the simulator instead of a real car) I didn't feel the need to build a much more complicated system. 
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
-
-####2. Final Model Architecture
-
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
+In the end, the network is able to drive the car at a speed of 20mph, without leaving the track and is also able to recover if the car is pushed to the sides of the track. It fails however, if the car is placed out of the track, as the training set does not include such harsh recovery events. It still works when the PI speed is set to 30mph but the driving is much less stable.
 
 ####3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded one and a half lap on track one, driving very slowly. I used my mouse to steer the vehicle and I had modified the tracking parameter to make it very slow. This avoided any brutal steering. I initially used center lane images only. Here is an example image of center lane driving:
+To capture good driving behavior, I first recorded one and a half lap on track one, driving very slowly. I used my mouse to steer the vehicle and I had modified the tracking sensitivity to make it less prone to brutal steering. This avoided any brutal steering. I sometimes let the car dift sideways to inlude recoveries. I initially used center lane images only. Here is an example image of center lane driving:
+
+![alt text][image1]
+
+To augment the data set, I also flipped images and angles thinking that this would avoid any bias toward egative steering angles. For example, here is an image that has then been flipped:
 
 ![alt text][image2]
+![alt text][image3]
 
-To augment the data set, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-
-To augment it further, and prevent the vehicle to slide to much sideways, I used the left and right cameras. The steering angle corresponding to the left camera was corrected by adding 0.2rad; while the steering angle corresponding to the left camera was corrected by removing 0.2rad. 
+To augment it further, and prevent the vehicle to slide to much sideways, I used the left and right cameras. The steering angle corresponding to the left camera was corrected by adding 0.2rad; while the steering angle corresponding to the left camera was corrected by removing 0.15rad. 
 
 Output at this stage :
 
 Train on 12638 samples, validate on 3160 samples
-* Epoch 1/4 : loss: 0.0363 - val_loss: 0.0370
-* Epoch 2/4 : loss: 0.0090 - val_loss: 0.0273
-* Epoch 3/4 : loss: 0.0069 - val_loss: 0.0268
-* Epoch 4/4 : loss: 0.0060 - val_loss: 0.0276
+```sh
+Epoch 1/4 : loss: 0.0363 - val_loss: 0.0370
+Epoch 2/4 : loss: 0.0090 - val_loss: 0.0273
+Epoch 3/4 : loss: 0.0069 - val_loss: 0.0268
+Epoch 4/4 : loss: 0.0060 - val_loss: 0.0276
+```
+We can see that the model is greatly overfitting. At that point, I started to add dropout and to complexify the network as explained previously.
 
+Finally, I added the example data provided in the project resources and added it to my own. With the three cameras, and the flipped images, the training set contains 51210 images. Pre-processing consist in normalizing images and cropping 50 pixels at the top and 20 at the bottom. At the beginning of each epoch, the training set is shuffled.
 
-Finally, I recorded more images 
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
+The output of the code at this point is the following 
+```sh
+Epoch 1/5 : loss: 0.0150 - val_loss: 0.0136
+Epoch 2/5 : loss: 0.0122 - val_loss: 0.0120
+Epoch 3/5 : loss: 0.0113 - val_loss: 0.0103
+Epoch 4/5 : loss: 0.0108 - val_loss: 0.0098
+Epoch 5/5 : loss: 0.0103 - val_loss: 0.0094
+```
+The evolution of the training and validation losses during the training is shown on the figure below.
 ![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
-
-
-#MYCOMMENT:
-
-I modifiy the setup of my mouse to make it less sensitive and less prone to brutal steering.
