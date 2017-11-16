@@ -136,7 +136,7 @@ The following images shows the full pipeline applied on one of the test image.
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./output_videos/project_video.mp4)
+Here's a [link to my video result](./output_videos/project_video_lane_detection.mp4)
 
 To make the line detection process more robust, we use some tracking system of the fitting parameters, the lane curvature and the distance to the centers. The lines shown on the videos, and the values correspond to an average of each of these parameters over the last 10 frames. 
 
