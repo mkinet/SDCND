@@ -9,6 +9,8 @@
 *.csv
 *.p
 CarND-Behavioral-Cloning-P3/recording
-CarND-Advanced-Lane-Lines-P4/test_videos
+*/test_videos
+*/training_images
+*/output_images
 *.pdf
 
