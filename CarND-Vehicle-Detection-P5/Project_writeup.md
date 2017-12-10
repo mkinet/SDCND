@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 [image1]: ./Figures/training_image.png
 [image2]: ./Figures/hog.png
-[image3]: ./Figures/sliding_windows.jpg
+[image3]: ./Figures/sliding_windows.png
 [image4]: ./Figures/detection_1.png
 [image5]: ./Figures/detection_2.png
 [image6]: ./Figures/detection_3.png
