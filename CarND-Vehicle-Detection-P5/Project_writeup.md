@@ -14,21 +14,21 @@ The goals / steps of this project are the following:
 [image1]: ./Figures/training_image.png
 [image2]: ./Figures/hog.png
 [image3]: ./Figures/sliding_windows.jpg
-[image4]: ./Figures/detection_1
-[image5]: ./Figures/detection_2
-[image6]: ./Figures/detection_3
-[image7]: ./Figures/heatmap_1
-[image8]: ./Figures/heatmap_2
-[image9]: ./Figures/heatmap_3
-[image10]: ./Figures/heatmap_4
-[image11]: ./Figures/heatmap_5
-[image12]: ./Figures/heatmap_6
-[image13]: ./Figures/bbox_1
-[image14]: ./Figures/bbox_2
-[image15]: ./Figures/bbox_3
-[image16]: ./Figures/bbox_4
-[image17]: ./Figures/bbox_5
-[image18]: ./Figures/bbox_6
+[image4]: ./Figures/detection_1.png
+[image5]: ./Figures/detection_2.png
+[image6]: ./Figures/detection_3.png
+[image7]: ./Figures/heatmap_1.png
+[image8]: ./Figures/heatmap_2.png
+[image9]: ./Figures/heatmap_3.png
+[image10]: ./Figures/heatmap_4.png
+[image11]: ./Figures/heatmap_5.png
+[image12]: ./Figures/heatmap_6.png
+[image13]: ./Figures/bbox_1.png
+[image14]: ./Figures/bbox_2.png
+[image15]: ./Figures/bbox_3.png
+[image16]: ./Figures/bbox_4.png
+[image17]: ./Figures/bbox_5.png
+[image18]: ./Figures/bbox_6.png
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
