@@ -1,7 +1,7 @@
-*/.ipynb_checkpoints
+../../CarND-LaneLines-P1/.ipynb_checkpoints
 */__pycache__
 *.npy
-*/data
+CarND-VehicleDetection-YOLO/data
 */.vscode
 .idea
 *.zip
@@ -14,3 +14,5 @@ CarND-Behavioral-Cloning-P3/recording
 */output_images
 *.pdf
 */examples
+*/.DS_Store
+.DS_Store
