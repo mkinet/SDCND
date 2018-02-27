@@ -92,9 +92,55 @@ class Linear(Node):
         inputs = self.inbound_nodes[0]
         weights = self.inbound_nodes[1]
         bias = self.inbound_nodes[2]
-        self.value = bias.value
-        for x, w in zip(inputs.value, weights.value):
-            self.value += x*w
+        self.value = np.dot(inputs.value, weights.value) + bias.value
+
+
+class Sigmoid(Node):
+    """
+    Method That implements a sigmoid node. Has only one inbound node
+    and produces the sigmoid of the input value as output.
+    """
+
+    def __init__(self, node):
+        Node.__init__(self, [node])
+
+    def _sigmoid(self, x):
+        """
+        This method is separate from `forward` because it
+        will be used later with `backward` as well.
+
+        `x`: A numpy array-like object.
+
+        Return the result of the sigmoid function.
+
+        Your code here!
+        """
+        return 1/(1+np.exp(-x))
+
+    def forward(self):
+        """
+        Set the value of this node to the result of the
+        sigmoid function, `_sigmoid`.
+
+        """
+        self.value = self._sigmoid(self.inbound_nodes[0].value)
+
+
+class Relu(Node):
+    """
+    Method That implements a relu node. Has only one inbound node
+    and produces max(0,input) as output.
+    """
+
+    def __init__(self, node):
+        Node.__init__(self, [node])
+
+    def forward(self):
+        """
+        Set the value of this node to the input if it is positive, to 0 other
+        wise.
+        """
+        self.value = np.max(0,self.inbound_nodes[0].value)
 
 
 def topological_sort(feed_dict):
@@ -102,6 +148,7 @@ def topological_sort(feed_dict):
     Sort generic nodes in topological order using Kahn's Algorithm.
 
     `feed_dict`: A dictionary where the key is a `Input` node and the value is the respective value feed to that node.
+
 
     Returns a list of sorted nodes.
     """
